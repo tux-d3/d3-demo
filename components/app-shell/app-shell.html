@@ -1,0 +1,61 @@
+<link rel="import" href="../app-common-behavior/app-common-behavior.html">
+<link rel="import" href="../elements.html">
+<dom-module id="app-shell">
+
+    <template>
+
+        <style>
+            :host {
+                @apply(--layout-fit);
+                display: block;
+                overflow: visible;
+                text-align: left;
+            }
+        </style>
+
+        <mat-drawer-panel id='shell'>
+            <mat-drawer target='content' break-point='960'>
+                <mat-list>
+                    <mat-item>Welcome</mat-item>
+                </mat-list>
+            </mat-drawer>
+            <mat-header-panel id='content'>
+                <mat-header z="4" background="blue-grey-800"><h1>TuxD3 Demo</h1></mat-header>
+                <mat-content id="main">
+                    <d3-chart id='chart' width='[[width]]'>
+                        <d3-data-source id='bgData' data='[[data]]'></d3-data-source>
+                        <d3-bar-graph z="1"></d3-bar-graph>
+                    </d3-chart>
+                </mat-content>
+            </mat-header-panel>
+        </mat-drawer-panel>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            // ELEMENT
+            is: 'app-shell',
+            // PROPERTIES
+            properties: {
+                width: {
+                    type: Number,
+                    notify: true,
+                    reflectToAttribute: true,
+                    value: 600
+                },
+                data: {
+                    type: Array,
+                    notify: true,
+                    value: function() { return [1, 2, 3]; }
+                }
+            },
+            // BEHAVIORS
+            behaviors: [
+                Polymer.AppCommonBehavior
+            ]
+        });
+    </script>
+
+</dom-module>

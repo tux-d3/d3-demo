@@ -1,0 +1,33 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.1",
+  "main": "server.js",
+  "dependencies": {
+    "ejs": "^2.2.0",
+    "expandjs": "^0.9.11",
+    "express": "^4.11.0",
+    "express-slash": "^2.0.0",
+    "serve-favicon": "^2.2.0",
+    "xp-emitter": "^0.9.11",
+    "xp-fs": "^0.9.11",
+    "xp-observer": "^0.9.11",
+    "xp-request": "^0.9.11",
+    "xp-schema": "^0.9.11"
+  },
+  "devDependencies": {
+    "crisper": "*",
+    "uglifyjs": "*",
+    "vulcanize": "*"
+  },
+  "scripts": {
+    "build": "npm run build:vulcanize && npm run build:crisp && npm run build:minify",
+    "build:vulcanize": "vulcanize static/components.html --exclude \"bower_components/polymer/polymer.html\" --inline-css --inline-scripts --strip-comments > static/vulcanized.html",
+    "build:crisp": "crisper --source static/vulcanized.html --html static/vulcanized.html --js static/vulcanized.js",
+    "build:minify": "uglifyjs static/vulcanized.js --mangle --output static/vulcanized.js",
+    "start": "NODE_ENV=production forever start server.js",
+    "start-dev": "forever start server.js",
+    "start-win": "SET NODE_ENV=production && forever start server.js",
+    "stop": "forever stop server.js"
+  }
+}

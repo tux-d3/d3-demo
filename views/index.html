@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- HEAD -->
+    <head>
+
+        <!-- META -->
+        <meta charset="UTF-8">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+        <!-- TITLE -->
+        <title>MagicCanvas by Trustifier</title>
+
+        <!-- POLYFILL -->
+        <script type="text/javascript" src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+        <!-- LINKS -->
+        <link rel="stylesheet" href="/styles/main.css">
+        <link rel="import" href="/bower_components/polymer/polymer.html">
+        <link rel="import" href="<%= dev ? '/components.html' : '/vulcanized.html' %>">
+
+    </head>
+
+    <!-- BODY -->
+    <body fullbleed>
+
+        <!-- SHELL -->
+        <app-shell></app-shell>
+
+        <!-- SCRIPTS -->
+        <script type="text/javascript" src="/scripts/cookiechoices.js"></script>
+        <script type="text/javascript">(function(){document.addEventListener('DOMContentLoaded',function(){cookieChoices.showCookieConsentBar('Cookies help us deliver our services. By using our services, you agree to our use of cookies.','Got it', 'Learn more', '/cookies');})})()</script>
+
+    </body>
+
+</html>
