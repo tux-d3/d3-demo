@@ -30,7 +30,7 @@
     // Others
     routes.schema  = routes.redirect.bind(function (req, res) { res.jsonp(schema); });
     routes.cookies = routes.redirect.bind(function (req, res) { res.render('cookies'); });
-    routes.index   = routes.redirect.bind(function (req, res) { res.render('index', {dev: dev, elementURL: ''}); });
+    routes.index   = routes.redirect.bind(function (req, res) { res.render('index', {dev: dev, elementName: '', elementURL: '', demo: ''}); });
     routes.partial = routes.redirect.bind(function (req, res) { res.render('partial/' + req.params.name, {}, function (error, html) { return error ? routes.error(req, res) : res.end(html); }); });
     routes.elements = routes.redirect.bind(function (req, res) {
         var elementURL = !XP.isVoid(req.params.name) ? '/elements/' + req.params.name : '';
