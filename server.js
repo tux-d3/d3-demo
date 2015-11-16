@@ -30,8 +30,17 @@
     // Others
     routes.schema  = routes.redirect.bind(function (req, res) { res.jsonp(schema); });
     routes.cookies = routes.redirect.bind(function (req, res) { res.render('cookies'); });
-    routes.index   = routes.redirect.bind(function (req, res) { res.render('index', {dev: dev}); });
+    routes.index   = routes.redirect.bind(function (req, res) { res.render('index', {dev: dev, elementURL: ''}); });
     routes.partial = routes.redirect.bind(function (req, res) { res.render('partial/' + req.params.name, {}, function (error, html) { return error ? routes.error(req, res) : res.end(html); }); });
+    routes.elements = routes.redirect.bind(function (req, res) {
+        var elementURL = !XP.isVoid(req.params.name) ? '/elements/' + req.params.name : '';
+        res.render('index', { dev: dev, elementName: req.params.name, elementURL: elementURL, demo: ''},
+            function(error, html) {
+                return error? routes.error(req,res): res.end(html); }); });
+    routes.demo = routes.redirect.bind(function (req, res) {
+        var elementURL = !XP.isVoid(req.params.name) ? '/demo/' + req.params.name : '';
+        res.render('index', { dev: dev, elementName: req.params.name, elementURL: elementURL, demo: 'demo' })
+    })
 
     /***********************************************************************/
     /* APP */
@@ -69,6 +78,8 @@
     router.get('/', routes.index);
     router.get('/cookies', routes.cookies);
     router.get('/partial/:name', routes.partial);
+    router.get('/elements/:name', routes.elements);
+    router.get('/demo/:name', routes.demo);
     router.get('/schema', routes.schema);
     router.get('/*', routes.error);
 

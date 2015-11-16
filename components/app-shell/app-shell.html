@@ -1,5 +1,9 @@
 <link rel="import" href="../app-common-behavior/app-common-behavior.html">
 <link rel="import" href="../elements.html">
+<link rel="import" href="../../bower_components/xp-doc-viewer/xp-doc-viewer.html">
+<link rel="import" href="../../bower_components/xp-doc-page/xp-doc-page.html">
+<link rel="import" href="../../bower_components/xp-window/xp-window.html">
+<link rel="import" href="../../bower_components/xp-pages/xp-page.html">
 <dom-module id="app-shell">
 
     <template>
@@ -11,22 +15,53 @@
                 overflow: visible;
                 text-align: left;
             }
+            :host #items [item] {
+                padding-left: 32px !important;
+            }
+
+            :host article .container {
+                max-width: 720px;
+                padding: 24px;
+            }
         </style>
 
         <mat-drawer-panel id='shell'>
+            <xp-window id='xpwin' on-xp-window-popstate='_handleXPWinPopState'></xp-window>
             <mat-drawer target='content' break-point='960'>
-                <mat-list>
-                    <mat-item>Welcome</mat-item>
-                </mat-list>
+                <mat-header-panel>
+                    <mat-header>
+                        <h1>TuxD3</h1>
+                    </mat-header>
+                    <mat-content>
+                        <mat-list id='items' index-attribute='href'>
+                            <mat-sublist label='Visual Elements' collapsible>
+                                <mat-sublist label="Graphs">
+                                    <a selectable item href="/elements/d3-chart">d3-chart</a>
+                                </mat-sublist>
+                            </mat-sublist>
+                            <mat-sublist label='Behaviors' collapsible>
+                                <mat-sublist label="Data">
+                                    <a selectable item href="/elements/d3-data-source">d3-data-source</a>
+                                </mat-sublist>
+                            </mat-sublist>
+                        </mat-list>
+                    </mat-content>
+            </mat-header-panel>
             </mat-drawer>
             <mat-header-panel id='content'>
-                <mat-header z="4" background="blue-grey-800"><h1>TuxD3 Demo</h1></mat-header>
-                <mat-content id="main">
-                    <d3-chart id='chart' width='[[width]]'>
-                        <d3-data-source id='bgData' data='[[data]]'></d3-data-source>
-                        <d3-bar-graph z="1"></d3-bar-graph>
-                    </d3-chart>
-                </mat-content>
+                <mat-header z="4" background="blue-grey-800"><h1>Elements</h1></mat-header>
+                <article id="article">
+                    <div class='container'>
+                        <template is='dom-if' if="[[!demo]]" restamp>
+                            <xp-doc-viewer id='docViewer' url='[[_computeDocumentURL(currentDocument)]]'>
+                                <xp-doc-page></xp-doc-page>
+                            </xp-doc-viewer>
+                        </template>
+                        <template is='dom-if' if='[[demo]]' restamp>
+                            <xp-page id='demo-page' content='[[_computeDemoElement(elementName)]]'></xp-page>
+                        </template>
+                    </div>
+                </article>
             </mat-header-panel>
         </mat-drawer-panel>
 
@@ -39,22 +74,58 @@
             is: 'app-shell',
             // PROPERTIES
             properties: {
-                width: {
-                    type: Number,
+                currentDocument: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                demo: {
+                    type: Boolean,
                     notify: true,
                     reflectToAttribute: true,
-                    value: 600
+                    value: false
                 },
-                data: {
-                    type: Array,
+                elementName: {
+                    type: String,
                     notify: true,
-                    value: function() { return [1, 2, 3]; }
+                    reflectToAttribute: true
                 }
             },
             // BEHAVIORS
             behaviors: [
                 Polymer.AppCommonBehavior
-            ]
+            ],
+            _computeDocumentURL: function(url) {
+                if(XP.isVoid(url) || url === '') { return ''; }
+                var element = XP.parseURL(url).path.substr('/elements/'.length);
+                var _url = '/bower_components/' + element + '/' + element + '.html';
+                return _url;
+            },
+            _computeDemoElement: function(name) {
+                return name + '-demo';
+            },
+            _computeDemoElementURL: function(url) {
+                if(XP.isVoid(url) || url === '') { return ''; }
+                var element = XP.parseURL(url).path.substr('/demo/'.length);
+                return '/bower_components/' + element + '/demo-element.html';
+            },
+            _handleClick: function(event) {
+                var self = this;
+                self.currentDocument = event.target.href;
+                self.$.xpwin.pushState({ innerState: true }, '', event.target.href);
+                event.preventDefault();
+            },
+            _handleXPWinPopState: function(event) {
+                var self = this;
+                self.currentDocument = event.detail.firer.pathname;
+            },
+            attached: function() {
+                var self = this,
+                    items = self.querySelectorAll('a[item]');
+                XP.forEach(items, function(item) {
+                    item.onclick = self._handleClick.bind(self);
+                })
+            }
         });
     </script>
 

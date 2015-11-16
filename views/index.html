@@ -21,14 +21,15 @@
         <link rel="stylesheet" href="/styles/main.css">
         <link rel="import" href="/bower_components/polymer/polymer.html">
         <link rel="import" href="<%= dev ? '/components.html' : '/vulcanized.html' %>">
-
+        <link rel="import" href="<%= elementURL %>">
+        <link rel="import" href="/bower_components/<%= elementName %>/demo-element.html">
     </head>
 
     <!-- BODY -->
     <body fullbleed>
 
         <!-- SHELL -->
-        <app-shell></app-shell>
+        <app-shell <%= demo %> element-name="<%= elementName %>" current-document="<%= elementURL %>"></app-shell>
 
         <!-- SCRIPTS -->
         <script type="text/javascript" src="/scripts/cookiechoices.js"></script>
