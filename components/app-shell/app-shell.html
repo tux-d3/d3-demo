@@ -37,6 +37,7 @@
                             <mat-sublist label='Visual Elements' collapsible>
                                 <mat-sublist label="Graphs">
                                     <a selectable item href="/elements/d3-chart">d3-chart</a>
+                                    <a selectable item href="/elements/d3-force-layout">d3-force-layout</a>
                                 </mat-sublist>
                             </mat-sublist>
                             <mat-sublist label='Behaviors' collapsible>
@@ -113,7 +114,10 @@
                 var self = this;
                 self.currentDocument = event.target.href;
                 self.$.xpwin.pushState({ innerState: true }, '', event.target.href);
-                event.preventDefault();
+                if((event.target.href.indexOf("demo") >= 0 && self.demo )
+                    || (event.target.href.indexOf("elements") && !self.demo)) {
+                    event.preventDefault();
+                }
             },
             _handleXPWinPopState: function(event) {
                 var self = this;
